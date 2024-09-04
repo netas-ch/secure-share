@@ -97,7 +97,7 @@ export class SaveShare {
     }
 
     async #addDownloadActions(fileOpts) {
-        const container = document.body.querySelector('div.container');
+        const container = document.body.querySelector('div.container-inner');
         document.getElementById('textcontent').style.display = null;
 
         let helpText = '';
@@ -281,7 +281,7 @@ export class SaveShare {
     }
 
     #removeInputFromGui() {
-        const keepClasses = ['logo', 'textcontent', 'footer'], container = document.querySelector('div.container');
+        const keepClasses = ['logo', 'textcontent', 'footer'], container = document.querySelector('div.container-inner');
         let nodeToRemove = 1;
 
         while (nodeToRemove) {
