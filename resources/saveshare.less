@@ -1,0 +1,271 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f4f4f4;
+  font-family: "Segoe UI Light", Arial, sans-serif;
+
+  @media only screen and (min-width: 500px) {
+    background-image: url(e2e.svg);
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 150px;
+  }
+}
+
+
+dialog {
+  outline: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 600px;
+  background-color: #fff;
+  padding: 20px 20px 0 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+
+  img {
+    width: 150px;
+  }
+}
+
+textarea {
+  height: 150px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  resize: vertical;
+  outline: none;
+
+  &:focus {
+    border-color: #ff7800;
+  }
+}
+
+
+.file-picker {
+  margin-bottom: 20px;
+}
+
+.file-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.form {
+  margin-top: 20px;
+  text-align: left;
+  accent-color: #ff7800;
+
+  input[type="range"] {
+    margin: 2px 0 0 0;
+    padding: 0;
+    vertical-align: bottom;
+
+  }
+
+  #openingsVal, #rangeVal {
+    margin-left: 5px;
+  }
+
+}
+
+.file-box {
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  .close {
+    padding: 2px 4px;
+    margin: 0 3px;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darkgrey;
+    }
+  }
+}
+
+dialog.share {
+  border: 0;
+  border-radius: 20px;
+  width: 500px;
+  max-width: 90%;
+  padding: 10px 20px;
+  text-align: center;
+
+  .code, .url {
+    > div:first-child {
+      color: #717171;
+    }
+
+    > div.value {
+      font-family: monospace;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #813a00;
+      }
+      &:active {
+        color: #ff7800;
+      }
+    }
+
+  }
+
+  button.close {
+    margin-bottom: 20px;
+  }
+}
+
+
+dialog.usercode {
+  border: 0;
+  border-radius: 20px;
+  width: 400px;
+  max-width: 90%;
+  padding: 10px 20px 40px 20px;
+  text-align: center;
+
+
+  input {
+    margin: 10px auto;
+    border: 0;
+    border-bottom: 1px solid grey;
+    font-family: monospace;
+    font-size: 1.5em;
+
+
+    &:focus {
+      outline: none;
+    }
+
+    &:invalid {
+      background-color: #ffeeee;
+      border-bottom-color: red;
+      color: red;
+    }
+  }
+
+  button {
+    border-radius: 2px;
+    border: 0;
+    margin-top: 10px;
+    padding: 10px 30px;
+    background-color: #ececec;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #cccccc;
+    }
+  }
+}
+
+
+
+div.download-file-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  a {
+    border-radius: 2px;
+    background-color: #ffb357;
+    margin-top: 5px;
+    padding: 10px 30px;
+    text-decoration: none;
+    color: black;
+    outline: none;
+
+    &:hover {
+      background-color: #ff7800;
+    }
+  }
+}
+
+div.infotext {
+  border-top: 1px solid #f3f3f3;
+  margin: 40px 0 0 0;
+  padding-top: 15px;
+}
+
+dialog.user-msg {
+  border: 0;
+  border-radius: 20px;
+  width: 400px;
+  max-width: 90%;
+  padding: 10px 20px 40px 20px;
+  text-align: center;
+
+  button {
+    border-radius: 2px;
+    border: 0;
+    margin-top: 10px;
+    padding: 10px 30px;
+    background-color: #ececec;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #cccccc;
+    }
+  }
+}
+
+button.copytoclipboard, button#upload, .share button.close {
+  border-radius: 2px;
+  border: 0;
+  margin: 0;
+  padding: 10px 30px;
+  background-color: #ececec;
+  cursor: pointer;
+  &:hover {
+    background-color: #cccccc;
+  }
+  &:active {
+    background-color: #ff7800;
+  }
+}
+button#upload {
+  margin-top: 20px;
+}
+
+.footer {
+  margin-top: 40px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  border-top: 1px solid #ececec;
+  text-align: center;
+  color: #cdcdcd;
+  font-size: 0.7em;
+
+  a {
+    text-decoration: none;
+    color: #cdcdcd;
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active {
+      color: #ff7800;
+    }
+  }
+}
