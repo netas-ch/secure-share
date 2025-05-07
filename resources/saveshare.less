@@ -184,24 +184,45 @@ dialog.usercode {
   }
 }
 
-
-
 div.download-file-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 
-  a {
-    border-radius: 2px;
-    background-color: #ffb357;
+  .link-container {
+    flex: 0;
     margin-top: 5px;
-    padding: 10px 30px;
-    text-decoration: none;
-    color: black;
-    outline: none;
+    max-width: 90%;
 
-    &:hover {
-      background-color: #ff7800;
+    a {
+      max-width: 100%;
+      background-color: #ffb357;
+      text-decoration: none;
+      border-radius: 2px;
+      color: black;
+      outline: none;
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 30px 8px 8px;
+      white-space: nowrap;
+      overflow: hidden;
+
+      &:hover {
+        background-color: #ff7800;
+      }
+
+      .text {
+        display: inline-block;
+        white-space: nowrap;
+        text-wrap: nowrap;
+      }
+
+      .icon {
+        flex-shrink: 0;
+        max-height: 30px;
+      }
     }
   }
 }

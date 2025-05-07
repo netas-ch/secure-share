@@ -166,22 +166,89 @@ export class SaveShare {
 
             const helpEl = document.createElement('div');
             helpEl.className = 'infotext';
-            helpEl.innerHTML = 'Dateien:';
+            helpEl.innerHTML = this.#files.length === 1 ? 'Dateianhang:' : 'Dateianhänge:';
             container.appendChild(helpEl);
 
             const fileContainer = document.createElement('div');
             fileContainer.className = 'download-file-container';
 
             this.#files.forEach((file) => {
+                const linkContainer = document.createElement('div');
+                linkContainer.className = 'link-container';
+                fileContainer.appendChild(linkContainer);
+
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(file);
-                link.textContent = '💾 ' + file.name;
                 link.setAttribute('download', file.name);
-                fileContainer.appendChild(link);
+                link.setAttribute('target', '_blank');
+                linkContainer.appendChild(link);
+
+                // icon
+                const iconEl = document.createElement('img');
+                iconEl.src = this.#getFileIconPath(file.name);
+                iconEl.className = 'icon';
+                link.appendChild(iconEl);
+
+                // text
+                const linkText = document.createElement('div');
+                linkText.textContent = file.name;
+                linkText.className = 'text';
+                link.appendChild(linkText);
             });
 
             container.appendChild(fileContainer);
+
+            // Download as Zip
+            if (this.#files.length > 1) {
+                const helpEl = document.createElement('div');
+                helpEl.className = 'infotext';
+                helpEl.innerHTML = 'Alle Dateien als zip:';
+                container.appendChild(helpEl);
+
+                const fileContainer = document.createElement('div');
+                fileContainer.className = 'download-file-container';
+                container.appendChild(fileContainer);
+
+                const linkContainer = document.createElement('div');
+                linkContainer.className = 'link-container';
+                fileContainer.appendChild(linkContainer);
+
+                const link = document.createElement('a');
+                link.style.cursor = 'pointer';
+                link.addEventListener('click', e => {
+                    this.#downloadFilesAsZip();
+                });
+                linkContainer.appendChild(link);
+
+                // icon
+                const iconEl = document.createElement('img');
+                iconEl.src = this.#getFileIconPath('files.zip');
+                iconEl.className = 'icon';
+                link.appendChild(iconEl);
+
+                // text
+                const linkText = document.createElement('div');
+                linkText.textContent = this.#files.length + ' Dateien';
+                linkText.className = 'text';
+                link.appendChild(linkText);
+            }
+
         }
+    }
+
+    async #downloadFilesAsZip() {
+        const downloader = await import('./ziplib/NullZipArchive.js');
+        const zip = new downloader.NullZipArchive('transfer.zip', false);
+        for (const file of this.#files) {
+            zip.addFileFromUint8Array(file.name, new Uint8Array(await file.arrayBuffer()));
+        }
+        const atag = zip.createDownloadLink('files.zip');
+        atag.style.display = 'none';
+        document.body.appendChild(atag);
+        atag.click();
+        window.setTimeout(() => {
+            document.body.removeChild(atag);
+        }, 500);
     }
 
     async #setIvAndKey(hashValues, code) {
@@ -486,6 +553,61 @@ export class SaveShare {
                 reject(e);
             }
         });
+    }
+
+    #getFileIconPath(filename) {
+        const basePath = 'resources/file-icons';
+        const list = ['3g2.svg', '3ga.svg', '3gp.svg', '7z.svg', 'aa.svg', 'aac.svg', 'ac.svg', 'accdb.svg', 'accdt.svg',
+            'ace.svg', 'adn.svg', 'ai.svg', 'aif.svg', 'aifc.svg', 'aiff.svg', 'ait.svg', 'amr.svg', 'ani.svg', 'apk.svg',
+            'app.svg', 'applescript.svg', 'asax.svg', 'asc.svg', 'ascx.svg', 'asf.svg', 'ash.svg', 'ashx.svg', 'asm.svg',
+            'asmx.svg', 'asp.svg', 'aspx.svg', 'asx.svg', 'au.svg', 'aup.svg', 'avi.svg', 'axd.svg', 'aze.svg', 'bak.svg',
+            'bash.svg', 'bat.svg', 'bin.svg', 'blank.svg', 'bmp.svg', 'bowerrc.svg', 'bpg.svg', 'browser.svg', 'bz2.svg',
+            'bzempty.svg', 'c.svg', 'cab.svg', 'cad.svg', 'caf.svg', 'cal.svg', 'catalog.json', 'cd.svg', 'cdda.svg', 'cer.svg',
+            'cfg.svg', 'cfm.svg', 'cfml.svg', 'cgi.svg', 'chm.svg', 'class.svg', 'cmd.svg', 'code-workspace.svg', 'codekit.svg',
+            'coffee.svg', 'coffeelintignore.svg', 'com.svg', 'compile.svg', 'conf.svg', 'config.svg', 'cpp.svg', 'cptx.svg',
+            'cr2.svg', 'crdownload.svg', 'crt.svg', 'crypt.svg', 'cs.svg', 'csh.svg', 'cson.svg', 'csproj.svg', 'css.svg',
+            'csv.svg', 'cue.svg', 'cur.svg', 'dart.svg', 'dat.svg', 'data.svg', 'db.svg', 'dbf.svg', 'deb.svg', 'default.svg',
+            'dgn.svg', 'dist.svg', 'diz.svg', 'dll.svg', 'dmg.svg', 'dng.svg', 'doc.svg', 'docb.svg', 'docm.svg', 'docx.svg',
+            'dot.svg', 'dotm.svg', 'dotx.svg', 'download.svg', 'dpj.svg', 'dsn.svg', 'ds_store.svg', 'dtd.svg', 'dwg.svg',
+            'dxf.svg', 'editorconfig.svg', 'el.svg', 'elf.svg', 'eml.svg', 'enc.svg', 'eot.svg', 'eps.svg', 'epub.svg',
+            'eslintignore.svg', 'exe.svg', 'f4v.svg', 'fax.svg', 'fb2.svg', 'fla.svg', 'flac.svg', 'flv.svg', 'fnt.svg',
+            'folder.svg', 'fon.svg', 'gadget.svg', 'gdp.svg', 'gem.svg', 'gif.svg', 'gitattributes.svg', 'gitignore.svg',
+            'go.svg', 'gpg.svg', 'gpl.svg', 'gradle.svg', 'gz.svg', 'h.svg', 'handlebars.svg', 'hbs.svg', 'heic.svg',
+            'hlp.svg', 'hs.svg', 'hsl.svg', 'htm.svg', 'html.svg', 'ibooks.svg', 'icns.svg', 'ico.svg', 'ics.svg', 'idx.svg',
+            'iff.svg', 'ifo.svg', 'image.svg', 'img.svg', 'iml.svg', 'in.svg', 'inc.svg', 'indd.svg', 'inf.svg', 'info.svg',
+            'ini.svg', 'inv.svg', 'iso.svg', 'j2.svg', 'jar.svg', 'java.svg', 'jpe.svg', 'jpeg.svg', 'jpg.svg', 'js.svg',
+            'json.svg', 'jsp.svg', 'jsx.svg', 'key.svg', 'kf8.svg', 'kmk.svg', 'ksh.svg', 'kt.svg', 'kts.svg', 'kup.svg',
+            'less.svg', 'lex.svg', 'licx.svg', 'lisp.svg', 'lit.svg', 'lnk.svg', 'lock.svg', 'log.svg', 'lua.svg', 'm.svg',
+            'm2v.svg', 'm3u.svg', 'm3u8.svg', 'm4.svg', 'm4a.svg', 'm4r.svg', 'm4v.svg', 'map.svg', 'master.svg', 'mc.svg',
+            'md.svg', 'mdb.svg', 'mdf.svg', 'me.svg', 'mi.svg', 'mid.svg', 'midi.svg', 'mk.svg', 'mkv.svg', 'mm.svg',
+            'mng.svg', 'mo.svg', 'mobi.svg', 'mod.svg', 'mov.svg', 'mp2.svg', 'mp3.svg', 'mp4.svg', 'mpa.svg', 'mpd.svg', 'mpe.svg',
+            'mpeg.svg', 'mpg.svg', 'mpga.svg', 'mpp.svg', 'mpt.svg', 'msg.svg', 'msi.svg', 'msu.svg', 'nef.svg', 'nes.svg',
+            'nfo.svg', 'nix.svg', 'npmignore.svg', 'ocx.svg', 'odb.svg', 'ods.svg', 'odt.svg', 'ogg.svg', 'ogv.svg', 'ost.svg',
+            'otf.svg', 'ott.svg', 'ova.svg', 'ovf.svg', 'p12.svg', 'p7b.svg', 'pages.svg', 'part.svg', 'pcd.svg', 'pdb.svg',
+            'pdf.svg', 'pem.svg', 'pfx.svg', 'pgp.svg', 'ph.svg', 'phar.svg', 'php.svg', 'pid.svg', 'pkg.svg', 'pl.svg',
+            'plist.svg', 'pm.svg', 'png.svg', 'po.svg', 'pom.svg', 'pot.svg', 'potx.svg', 'pps.svg', 'ppsx.svg', 'ppt.svg',
+            'pptm.svg', 'pptx.svg', 'prop.svg', 'ps.svg', 'ps1.svg', 'psd.svg', 'psp.svg', 'pst.svg', 'pub.svg', 'py.svg',
+            'pyc.svg', 'qt.svg', 'ra.svg', 'ram.svg', 'rar.svg', 'raw.svg', 'rb.svg', 'rdf.svg', 'rdl.svg', 'reg.svg',
+            'resx.svg', 'retry.svg', 'rm.svg', 'rom.svg', 'rpm.svg', 'rpt.svg', 'rsa.svg', 'rss.svg', 'rst.svg', 'rtf.svg',
+            'ru.svg', 'rub.svg', 'sass.svg', 'scss.svg', 'sdf.svg', 'sed.svg', 'sh.svg', 'sit.svg', 'sitemap.svg',
+            'skin.svg', 'sldm.svg', 'sldx.svg', 'sln.svg', 'sol.svg', 'sphinx.svg', 'sql.svg', 'sqlite.svg', 'step.svg',
+            'stl.svg', 'svg.svg', 'swd.svg', 'swf.svg', 'swift.svg', 'swp.svg', 'sys.svg', 'tar.svg', 'tax.svg', 'tcsh.svg',
+            'tex.svg', 'tfignore.svg', 'tga.svg', 'tgz.svg', 'tif.svg', 'tiff.svg', 'tmp.svg', 'tmx.svg', 'torrent.svg',
+            'tpl.svg', 'ts.svg', 'tsv.svg', 'ttf.svg', 'twig.svg', 'txt.svg', 'udf.svg', 'vb.svg', 'vbproj.svg', 'vbs.svg',
+            'vcd.svg', 'vcf.svg', 'vcs.svg', 'vdi.svg', 'vdx.svg', 'vmdk.svg', 'vob.svg', 'vox.svg', 'vscodeignore.svg',
+            'vsd.svg', 'vss.svg', 'vst.svg', 'vsx.svg', 'vtx.svg', 'war.svg', 'wav.svg', 'wbk.svg', 'webinfo.svg', 'webm.svg',
+            'webp.svg', 'wma.svg', 'wmf.svg', 'wmv.svg', 'woff.svg', 'woff2.svg', 'wps.svg', 'wsf.svg', 'xaml.svg', 'xcf.svg',
+            'xfl.svg', 'xlm.svg', 'xls.svg', 'xlsm.svg', 'xlsx.svg', 'xlt.svg', 'xltm.svg', 'xltx.svg', 'xml.svg', 'xpi.svg',
+            'xps.svg', 'xrb.svg', 'xsd.svg', 'xsl.svg', 'xspf.svg', 'xz.svg', 'yaml.svg', 'yml.svg', 'z.svg', 'zip.svg', 'zsh.svg'];
+
+        const m = filename.match(/\.([a-z0-9]+)$/i);
+        if (m) {
+            const type = m[1].toLowerCase(), x = list.indexOf(type + '.svg');
+            if (x !== -1) {
+                return basePath + '/' + list[x];
+            }
+        }
+        return basePath + '/' + 'download.svg';
     }
 
 

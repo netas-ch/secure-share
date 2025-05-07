@@ -159,17 +159,37 @@ div.download-file-container {
   flex-wrap: wrap;
   gap: 10px;
 }
-div.download-file-container a {
-  border-radius: 2px;
-  background-color: #ffb357;
+div.download-file-container .link-container {
+  flex: 0;
   margin-top: 5px;
-  padding: 10px 30px;
+  max-width: 90%;
+}
+div.download-file-container .link-container a {
+  max-width: 100%;
+  background-color: #ffb357;
   text-decoration: none;
+  border-radius: 2px;
   color: black;
   outline: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 30px 8px 8px;
+  white-space: nowrap;
+  overflow: hidden;
 }
-div.download-file-container a:hover {
+div.download-file-container .link-container a:hover {
   background-color: #ff7800;
+}
+div.download-file-container .link-container a .text {
+  display: inline-block;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+div.download-file-container .link-container a .icon {
+  flex-shrink: 0;
+  max-height: 30px;
 }
 div.infotext {
   border-top: 1px solid #f3f3f3;
