@@ -15,6 +15,9 @@ export class SaveShare {
             this.openings = 1;
             this.days = 7;
         }
+
+        // fetch max file size
+        this.#getMaxFileSize();
     }
 
     get textContent() {
@@ -43,6 +46,20 @@ export class SaveShare {
 
     get type() {
         return document.querySelector('input[name="type"]:checked').value;
+    }
+
+    async #getMaxFileSize() {
+        const r = await fetch('data.php?maxFileSize=1');
+        const d = await r.json();
+        const maxFileSize = d.maxFileSize;
+
+
+
+        const el = document.createElement('div');
+        el.textContent = 'Max. ' + (maxFileSize / 1024 / 1024).toFixed(0) + ' MB';
+        el.className = 'filesize';
+        const fp = document.querySelector('div.file-picker');
+        fp.appendChild(el);
     }
 
     async #initDecodingGui() {
@@ -661,11 +678,23 @@ export class SaveShare {
 
             const diag = document.createElement('dialog');
             diag.className = 'share';
-            let html = '<h4>Klicken zum Kopieren</h4>';
+            let html = '<h4>Teilen Sie folgende Angaben mit dem Empfänger:</h4>';
             if (uc.code) {
-                html += '<div class="code"><div>Code</div><div class="value">' + uc.code + '</div></div>';
+                html += '<div class="code">';
+                html += '<div class="label">Code:</div>';
+                html += '<input type="text" readonly value="' + uc.code + '" translate="no" />';
+                html += '<button class="mail" title="Per E-Mail versenden"></button>';
+                html += '<button class="copy" title="Kopieren"></button>';
+                html += '</div>';
             }
-            html += '<div class="url"><div>Link</div><div class="value">' + uc.url + '</div></div>';
+
+            html += '<div class="url">';
+            html += '<div class="label">Link:</div>';
+            html += '<input type="text" readonly value="' + uc.url + '" translate="no" />';
+            html += '<button class="mail" title="Per E-Mail versenden"></button>';
+            html += '<button class="copy" title="Kopieren"></button>';
+            html += '</div>';
+
             html += '<button class="close">Schliessen</button>';
             diag.innerHTML = html;
             document.body.appendChild(diag);
@@ -675,13 +704,35 @@ export class SaveShare {
                 document.body.removeChild(diag);
             });
 
+            const dateUntil = new Date(Date.now() + (this.days * 3600 * 24 * 1000));
+            let infoText = `Der Link kann bis am ` + dateUntil.toLocaleString('de-CH', {
+                weekday: 'long',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) + ` `;
+            if (this.openings <= 20) {
+                infoText +=  this.openings + ` Mal `;
+            }
+            infoText += `geöffnet werden.`;
+
             if (uc.code) {
-                diag.querySelector('.code .value').addEventListener('click', () => {
+                diag.querySelector('.code button.copy').addEventListener('click', () => {
                     navigator.clipboard.writeText(uc.code);
                 });
+                diag.querySelector('.code button.mail').addEventListener('click', () => {
+                    const subject = document.title.replace(/[^a-z0-9 ]/ui, '').trim();
+                    location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Code: ' + uc.code + "\n")}`;
+                });
             }
-            diag.querySelector('.url .value').addEventListener('click', () => {
+            diag.querySelector('.url button.copy').addEventListener('click', () => {
                 navigator.clipboard.writeText(uc.url);
+            });
+            diag.querySelector('.url button.mail').addEventListener('click', () => {
+                const subject = document.title.replace(/[^a-z0-9 ]/ui, '').trim();
+                location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(uc.url + "\n\n" + infoText + "\n")}`;
             });
 
         } catch (e) {

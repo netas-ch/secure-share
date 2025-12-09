@@ -58,8 +58,16 @@ try {
         case 'GET':
 
             // Handle GET request - return the file content
+            if (!empty($_GET['maxFileSize'])) {
+                header('Content-Type: application/json');
+                echo json_encode(['maxFileSize' => min(convertToBytes(ini_get('upload_max_filesize')), convertToBytes(ini_get('post_max_size')))]);
+                exit;
+            }
+
+            // Handle GET request - return the file content
             if (!empty($_GET['accessKey'])) {
                 $t = time();
+                header('Content-Type: application/json');
                 echo json_encode(['accessKey' => base_convert((string)$t, 10, 36) . '-' . md5($t . 'JdiqJ03hHS2')]);
                 exit;
             }
@@ -264,4 +272,18 @@ function getCreateTime($filePath) {
         return (int)base_convert($matches[1], 36, 10);
     }
     return 0;
+}
+
+function convertToBytes($value) {
+    $value = trim($value);
+    $lastChar = strtolower(substr($value, -1));
+    $num = (int)$value;
+
+    switch ($lastChar) {
+        case 'g': $num *= 1024;
+        case 'm': $num *= 1024;
+        case 'k': $num *= 1024;
+    }
+
+    return $num;
 }
