@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 body {
   display: flex;
   justify-content: center;
@@ -53,6 +56,9 @@ textarea:focus {
 .file-picker {
   margin-bottom: 20px;
 }
+.file-picker .filesize {
+  font-size: 10pt;
+}
 .file-display {
   display: flex;
   flex-wrap: wrap;
@@ -97,27 +103,63 @@ dialog.share {
   padding: 10px 20px;
   text-align: center;
 }
-dialog.share .code > div:first-child,
-dialog.share .url > div:first-child {
-  color: #717171;
+dialog.share .code,
+dialog.share .url {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
 }
-dialog.share .code > div.value,
-dialog.share .url > div.value {
+dialog.share .code .label,
+dialog.share .url .label {
+  background-color: #e1e1e1;
+  border: 1px solid #e1e1e1;
+  border-radius: 3px 0 0 3px;
+  width: 50px;
+  line-height: 25px;
+  user-select: none;
+}
+dialog.share .code input,
+dialog.share .url input {
   font-family: monospace;
-  margin-bottom: 20px;
-  font-size: 1.2em;
+  text-align: center;
+  border: 1px solid #e1e1e1;
+  height: 30px;
+  outline: none;
+  flex: 1;
+  padding: 0 6px;
+}
+dialog.share .code button,
+dialog.share .url button {
+  height: 30px;
+  width: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid #e1e1e1;
+  background-color: #e1e1e1;
+  border-radius: 0;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: background-color, border-color 1s;
 }
-dialog.share .code > div.value:hover,
-dialog.share .url > div.value:hover {
-  color: #813a00;
+dialog.share .code button:active,
+dialog.share .url button:active {
+  background-color: #9f9f9f;
+  border-color: #9f9f9f;
+  transition: background-color, border-color 10ms;
 }
-dialog.share .code > div.value:active,
-dialog.share .url > div.value:active {
-  color: #ff7800;
+dialog.share .code button:last-child,
+dialog.share .url button:last-child {
+  border-radius: 0 3px 3px 0;
+}
+dialog.share .code button.copy,
+dialog.share .url button.copy {
+  background-image: url(./copy.svg);
+}
+dialog.share .code button.mail,
+dialog.share .url button.mail {
+  background-image: url(./mail.svg);
 }
 dialog.share button.close {
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 dialog.usercode {

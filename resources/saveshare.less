@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -61,6 +65,10 @@ textarea {
 
 .file-picker {
   margin-bottom: 20px;
+
+  .filesize {
+    font-size: 10pt;
+  }
 }
 
 .file-display {
@@ -115,28 +123,63 @@ dialog.share {
   text-align: center;
 
   .code, .url {
-    > div:first-child {
-      color: #717171;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+
+    .label {
+      background-color: #e1e1e1;
+      border: 1px solid #e1e1e1;
+      border-radius: 3px 0 0 3px;
+      width: 50px;
+      line-height: 25px;
+      user-select: none;
     }
 
-    > div.value {
+    input {
       font-family: monospace;
-      margin-bottom: 20px;
-      font-size: 1.2em;
-      cursor: pointer;
-      transition: color 0.2s;
+      text-align: center;
+      border: 1px solid #e1e1e1;
+      height: 30px;
+      outline: none;
+      flex: 1;
+      padding: 0 6px;
+    }
 
-      &:hover {
-        color: #813a00;
-      }
+    button {
+      height: 30px;
+      width: 30px;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 1px solid #e1e1e1;
+      background-color: #e1e1e1;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color,border-color 1s;
+
       &:active {
-        color: #ff7800;
+        background-color: #9f9f9f;
+        border-color: #9f9f9f;
+        transition: background-color,border-color 10ms;
+      }
+
+      &:last-child {
+        border-radius: 0 3px 3px 0;
+      }
+
+      &.copy {
+        background-image: url(./copy.svg);
+      }
+
+      &.mail {
+        background-image: url(./mail.svg);
       }
     }
 
   }
 
   button.close {
+    margin-top: 10px;
     margin-bottom: 20px;
   }
 }
